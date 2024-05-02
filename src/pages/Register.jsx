@@ -42,7 +42,7 @@ function Register() {
             id="name"
             name="name"
             value={name}
-            onChange={handleChange}
+            onChange={(e) => setName(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Enter your name"
             required
@@ -57,7 +57,7 @@ function Register() {
             id="email"
             name="email"
             value={email}
-            onChange={handleChange}
+            onChange={(e) => setEmail(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Enter your email"
             required
@@ -72,7 +72,7 @@ function Register() {
             id="password"
             name="password"
             value={password}
-            onChange={handleChange}
+            onChange={(e) => setPassword(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Enter your password"
             required

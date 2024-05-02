@@ -5,24 +5,30 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleInput = (e) => {
+    if (e) {
+      if (e.target.id === "email") setEmail(e.target.value);
+      if (e.target.id === "password") setPassword(e.target.value);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-        await dispatch(login({ email, password }));
-        toast.success("Successfully logged in!");
-        navigate("/"); // redirect to home page after successful login
-    } catch (error) {
-        toast.error("Failed to login. Please try again.");
-    }
-};
-const handleRegister = () => {
+    let data = JSON.stringify({
+      email,
+      password,
+    });
+    dispatch(login(data, navigate));
+  };
+
+  const handleRegister = () => {
     navigate("/register");
-}
+  };
 
   return (
     <div className="container mx-auto mt-10">
@@ -59,17 +65,21 @@ const handleRegister = () => {
         <div className="flex items-center justify-between">
           <button
             type="submit"
+            onChange={handleSubmit}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Login
           </button>
         </div>
-        <p className="text-center text-sm text-gray-500">Don&#x27;t have an account?
-            <a href="#!"
+        <p className="text-center text-sm text-gray-500">
+          Don't have an account?
+          <a
+            href="#!"
             onClick={handleRegister}
-                className="font-semibold text-gray-600 hover:underline focus:text-gray-800 focus:outline-none">Sign
-                up
-            </a>
+            className="font-semibold text-gray-600 hover:underline focus:text-gray-800 focus:outline-none"
+          >
+            Sign up
+          </a>
         </p>
       </form>
     </div>

@@ -10,7 +10,7 @@ function DetailPage() {
   const dispatch = useDispatch();
   const { nomorSurat } = useParams();
   const suratDetail = useSelector((state) => state.surat.suratDetail);
-  const { isPlaying, selectedAudio } = useSelector((state) => state.audio);
+//   const { isPlaying, selectedAudio } = useSelector((state) => state.audio);
 //   console.log("detail  ", suratDetail);
 
   useEffect(() => {
