@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../redux/actions/authActions";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 function Register() {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     if (e) {
@@ -28,6 +30,10 @@ function Register() {
     });
     dispatch(register(data, navigate))
 };
+
+const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="container mx-auto mt-10">
@@ -67,21 +73,32 @@ function Register() {
           <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter your password"
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              value={password}
+              onChange={handleChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"
+              placeholder="Enter your password"
+              required
+            />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none"
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                className="h-6 w-6 text-gray-700"
+              />
+            </button>
+          </div>
         </div>
         <div className="flex items-center justify-between">
           <button
             type="submit"
-            onChange={handleSubmit}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Register
