@@ -2,14 +2,18 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import masjidImage from "../assets/masjid.jpg";
 import Header from "../components/Header";
+import { useSelector } from "react-redux"; // Import useSelector from react-redux
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn); // Access isLoggedIn from Redux store
 
   const handleGetStartedClick = () => {
-    if (!localStorage.getItem("token")) {
+    if (isLoggedIn) {
+      navigate("/home");
+    } else {
       confirmAlert({
         title: 'Harus Login',
         message: 'Anda harus login terlebih dahulu.',
@@ -24,8 +28,6 @@ const LandingPage = () => {
           }
         ]
       });
-    } else {
-      navigate("/home");
     }
   };
   

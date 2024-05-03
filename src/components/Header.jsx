@@ -12,7 +12,7 @@ function Header() {
   const { isLoggedIn, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(getMe(null, null, null));
+    dispatch(getMe(null));
   }, [dispatch]);
 
   const handleLogout = () => {

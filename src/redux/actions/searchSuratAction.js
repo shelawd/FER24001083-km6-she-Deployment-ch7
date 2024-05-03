@@ -16,6 +16,5 @@ export const searchSurat = (query) => async (dispatch, getState) => {
       dispatch(setSearchResults(searchResults));
     } catch (error) {
       console.error("Error while searching surat:", error);
-      // Tindakan penanganan kesalahan
     }
   };

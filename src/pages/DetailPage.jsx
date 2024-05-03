@@ -9,14 +9,13 @@ function DetailPage() {
   const dispatch = useDispatch();
   const { nomorSurat } = useParams();
   const [selectedAyat, setSelectedAyat] = useState("");
-  const [audio, setAudio] = useState(null); // State untuk menyimpan objek audio
+  const [audio, setAudio] = useState(null); 
 
   const suratDetail = useSelector((state) => state.surat.suratDetail);
 
   useEffect(() => {
     dispatch(getDetailSurat(nomorSurat));
     
-    // Membersihkan objek audio saat unmount
     return () => {
       if (audio) {
         audio.pause();
@@ -34,7 +33,6 @@ function DetailPage() {
   };
 
   const handleAudioPlay = (audioSrc) => {
-    // Memastikan audio sebelumnya dihentikan sebelum memutar yang baru
     if (audio) {
       audio.pause();
       setAudio(null);

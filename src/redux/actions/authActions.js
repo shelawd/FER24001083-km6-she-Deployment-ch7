@@ -26,7 +26,6 @@ export const registerLoginWithGoogle =
       dispatch(setIsLoggedIn(true));
       dispatch(getMe(null, null, null));
 
-      // We will use navigate from react-router-dom by passing the argument because the useNavigate() can only used in component
       navigate("/home");
     } catch (error) {
       if (axios.isAxiosError(error)) {
