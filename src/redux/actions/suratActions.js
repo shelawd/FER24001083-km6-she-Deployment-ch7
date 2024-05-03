@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAllSurat, setDetailSurat, setTafsirSurat, setSearchResults } from "../reducers/suratReducers";
+import { setAllSurat, setDetailSurat, setTafsirSurat } from "../reducers/suratReducers";
 
 export const getAllSurat = () => async (dispatch) => {
     try {
@@ -32,7 +32,7 @@ export const getDetailSurat = (nomor) => async (dispatch) => {
     }
 };
 
-export const getTafsirSurat = (nomorSurat, nomorAyat) => async (dispatch) => {
+export const getTafsirSurat = (nomorAyat) => async (dispatch) => {
     try {
         const response = await axios.get(
             `https://equran.id/api/v2/tafsir/${nomorAyat}`
@@ -48,23 +48,6 @@ export const getTafsirSurat = (nomorSurat, nomorAyat) => async (dispatch) => {
 };
 
 
-export const searchSurat = (query) => async (dispatch, getState) => {
-    try {
-      const suratData = getState().surat.surat.data;
-      const lowercaseQuery = query.toLowerCase();
-  
-      const searchResults = suratData.filter((surat) => {
-        return (
-          surat.nama.toLowerCase().includes(lowercaseQuery) ||
-          surat.namaLatin.toLowerCase().includes(lowercaseQuery)
-        );
-      });
-  
-      dispatch(setSearchResults(searchResults));
-    } catch (error) {
-      console.error("Error while searching surat:", error);
-      // Tindakan penanganan kesalahan
-    }
-  };
+
 
 

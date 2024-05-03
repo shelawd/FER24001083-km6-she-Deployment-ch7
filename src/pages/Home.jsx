@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSurat, searchSurat } from "../redux/actions/suratActions";
+import { getAllSurat } from "../redux/actions/suratActions";
+import { searchSurat } from "../redux/actions/searchSuratAction";
 import { useNavigate } from "react-router-dom";
 
 import aurora from "../assets/aurora.jpg";
-// import Header from "../../components/Header";
+import Header from "../components/Header";
 
 function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const surat = useSelector((state) => state.surat.surat.data);
-  // const surat = useSelector((state) => state.surat.searchResults);
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const [searchQuery, setSearchQuery] = useState("");
+
+  const surat = useSelector((state) => state.surat.surat.data);
+  const searchResults = useSelector((state) => state.surat.searchResults);
 
   useEffect(() => {
     dispatch(getAllSurat());
@@ -26,17 +28,18 @@ function Home() {
     return () => clearInterval(intervalID);
   }, []);
 
-  const handleSearchInputChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    dispatch(searchSurat(query.toLowerCase())); 
+  const handleSearch = (event) => {
+    const query = event.target.value; 
+    setSearchQuery(query); // menyimpan nilai pencarian di state
+    dispatch(searchSurat(query)); 
   };
 
-
+  // Menentukan data yang akan ditampilkan berdasarkan hasil pencarian atau semua surat
+  const dataToDisplay = searchQuery.trim() !== "" ? searchResults : surat;
 
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <div className="text-center mt-9">
         <div
           className="bg-[#912BBC] p-2 rounded-md text-white inline-block bg-cover"
@@ -50,17 +53,18 @@ function Home() {
       </div>
 
       <div>
-      <input
+        <input
           type="text"
           placeholder="Cari surat..."
-          value={searchQuery}
-          onChange={handleSearchInputChange}
+          value={searchQuery} 
+          onChange={handleSearch}
+          className="bg-white rounded-md p-2 text-black mt-6 ms-11 outline-none focus:ring-2 focus:ring-[#7360DF] focus:border-transparent"
         /> 
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-10">
-        {surat && surat.length > 0 ? (
-          surat.map((data) => (
+        {dataToDisplay && dataToDisplay.length > 0 ? (
+          dataToDisplay.map((data) => (
             <div
               key={data.nomor}
               className="bg-[#E4A5FF] rounded p-4 flex justify-start items-center  "
@@ -86,7 +90,7 @@ function Home() {
           ))
         ) : (
           <p className="text-center text-[#912BBC] font-bold mt-4">
-            Surat tidak ditemukan!
+            {searchQuery.trim() !== "" ? "Surat tidak ditemukan!" : "Memuat..."}
           </p>
         )}
       </div>

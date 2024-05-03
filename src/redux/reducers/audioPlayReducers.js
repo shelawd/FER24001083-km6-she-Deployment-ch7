@@ -1,25 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
-  isPlaying: false,
-  selectedAudio: null,
+  audioSrc: null // Menggunakan state untuk menyimpan src dari audio yang diputar
 };
 
-const audioSlice = createSlice({
-  name: "audio",
-  initialState,
-  reducers: {
-    playAudio: (state, action) => {
-      state.isPlaying = true;
-      state.selectedAudio = action.payload;
-    },
-    stopAudio: (state) => {
-      state.isPlaying = false;
-      state.selectedAudio = null;
-    },
-  },
-});
+const audioPlayReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "PLAY_AUDIO":
+      return { ...state, audioSrc: action.payload }; // Memulai pemutaran audio dengan menyimpan src audio
+    case "STOP_AUDIO":
+      return { ...state, audioSrc: null }; // Menghentikan audio dengan mengosongkan src
+    default:
+      return state;
+  }
+};
 
-export const { playAudio, stopAudio } = audioSlice.actions;
-
-export default audioSlice.reducer;
+export default audioPlayReducer;

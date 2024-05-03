@@ -1,21 +1,37 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserData, logoutUser } from "../redux/actions/authActions";
+import { getMe, logout } from "../redux/actions/authActions";
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
 function Header() {
   const dispatch = useDispatch();
-  const userName = useSelector((state) => state.auth.userName);
+  const navigate = useNavigate();
+
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(fetchUserData());
+    dispatch(getMe(null, null, null));
   }, [dispatch]);
 
   const handleLogout = () => {
-    const isConfirmed = window.confirm("Apakah kamu yakin logout?");
-    if (isConfirmed) {
-      dispatch(logoutUser());
-    }
+    confirmAlert({
+      title: 'Konfirmasi Logout',
+      message: 'Apakah kamu yakin ingin logout?',
+      buttons: [
+        {
+          label: 'Ya',
+          onClick: () => {
+            dispatch(logout(() => navigate("/")));
+          }
+        },
+        {
+          label: 'Tidak',
+          onClick: () => {}
+        }
+      ]
+    });
   };
 
   return (
@@ -33,9 +49,9 @@ function Header() {
       </div>
       {/* kanan */}
       <div className="hidden md:block">
-        {userName ? (
+        {isLoggedIn ? (
           <div className="flex items-center">
-            <p className="inline-block p-2 text-blue-200 mr-2">Welcome, {userName}</p>
+            <p className="inline-block p-2 text-blue-200 mr-2">Welcome, {user?.name} </p>
             <button
               onClick={handleLogout}
               className="inline-block p-2 text-blue-200 hover:text-blue-100 mr-2"

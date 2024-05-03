@@ -3,31 +3,53 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getDetailSurat } from "../redux/actions/suratActions";
 import { useNavigate } from "react-router-dom";
-import { playAudio, stopAudio } from "../redux/reducers/audioPlayReducers";
 
 function DetailPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { nomorSurat } = useParams();
+  const [selectedAyat, setSelectedAyat] = useState("");
+  const [audio, setAudio] = useState(null); // State untuk menyimpan objek audio
+
   const suratDetail = useSelector((state) => state.surat.suratDetail);
-//   const { isPlaying, selectedAudio } = useSelector((state) => state.audio);
-//   console.log("detail  ", suratDetail);
 
   useEffect(() => {
     dispatch(getDetailSurat(nomorSurat));
-  }, [dispatch, nomorSurat]);
+    
+    // Membersihkan objek audio saat unmount
+    return () => {
+      if (audio) {
+        audio.pause();
+        setAudio(null);
+      }
+    };
+  }, [dispatch, nomorSurat, audio]);
 
-  const [selectedAyat, setSelectedAyat] = useState("");
   const handleAyatChange = (event) => {
     setSelectedAyat(event.target.value);
+    if (audio) {
+      audio.pause();
+      setAudio(null);
+    }
   };
 
   const handleAudioPlay = (audioSrc) => {
-    dispatch(playAudio(audioSrc));
+    // Memastikan audio sebelumnya dihentikan sebelum memutar yang baru
+    if (audio) {
+      audio.pause();
+      setAudio(null);
+    }
+
+    const newAudio = new Audio(audioSrc);
+    newAudio.play();
+    setAudio(newAudio);
   };
 
-  const handleAudioStop = () => {
-    dispatch(stopAudio());
+  const handleStopAudio = () => {
+    if (audio) {
+      audio.pause();
+      setAudio(null);
+    }
   };
 
   return (
@@ -123,19 +145,28 @@ function DetailPage() {
                       >
                         Tafsir Surat
                       </button>
-                      <audio controls>
-                        <source
-                          src={
+                      <button
+                        onClick={() =>
+                          handleAudioPlay(
                             ayat.audio[Object.keys(ayat.audio)[0]]
-                          }
-                          type="audio/mpeg"
-                        />
-                      </audio>
+                          )
+                        }
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        Play Audio
+                      </button>
+                      <button
+                  onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Stop Audio
+                </button>
                     </div>
                   </div>
                 ))}
             </div>
           )}
+
           {selectedAyat && (
             <div className="mb-4">
               <div
@@ -164,22 +195,32 @@ function DetailPage() {
                 </p>
                 <button
                   onClick={() => {
-                    navigate(`/tafsir-surat/${nomorSurat}/${ayat.nomorAyat}`);
+                    navigate(`/tafsir-surat/${nomorSurat}/${selectedAyat}`);
                   }}
                   className="text-blue-500 hover:text-blue-700"
                 >
                   Tafsir Surat
                 </button>
-                <audio controls>
-                  <source
-                    src={
+                <button
+                  onClick={() =>
+                    handleAudioPlay(
                       suratDetail.data.ayat[selectedAyat - 1].audio[
-                        Object.keys(suratDetail.data.ayat[selectedAyat - 1].audio)[0]
+                        Object.keys(
+                          suratDetail.data.ayat[selectedAyat - 1].audio
+                        )[0]
                       ]
-                    }
-                    type="audio/mpeg"
-                  />
-                </audio>
+                    )
+                  }
+                  className="text-blue-500 hover:text-blue-700"
+                >
+                  Play Audio
+                </button>
+                <button
+                  onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Stop Audio
+                </button>
               </div>
             </div>
           )}

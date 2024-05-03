@@ -13,7 +13,7 @@ function TafsirSurat() {
 
     useEffect(() => {
         dispatch(getTafsirSurat(nomorSurat, nomorAyat));
-    }, [dispatch, nomorSurat, nomorAyat]);
+    }, [dispatch, nomorSurat,  nomorAyat]);
 
     const tafsirAyat = tafsirSurat?.data?.tafsir?.filter(item => item.ayat === parseInt(nomorAyat));
 
