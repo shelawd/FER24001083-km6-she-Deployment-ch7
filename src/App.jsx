@@ -12,6 +12,7 @@ import TafsirSurat from "./pages/TafsirSurat";
 import Register from "./pages/Register";
 import LandingPage from "./components/LandingPage";
 import Protected from "./components/Protected";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/home" element={ <Protected><Home /></Protected>} />
+              <Route path="/about" element={ <Protected><About /></Protected>} />
               <Route path="/detail-surat/:nomorSurat" element={<Protected><DetailPage /></Protected>} />
               <Route path="/tafsir-surat/:nomorSurat/:nomorAyat" element={<Protected><TafsirSurat /></Protected>} />
             </Routes>

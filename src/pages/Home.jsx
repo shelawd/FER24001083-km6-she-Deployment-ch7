@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import aurora from "../assets/aurora.jpg";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Home() {
   const navigate = useNavigate();
@@ -94,7 +95,9 @@ function Home() {
           </p>
         )}
       </div>
+      <Footer />
     </div>
+    
   );
 }
 

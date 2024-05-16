@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getTafsirSurat } from "../redux/actions/suratActions";
 
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function TafsirSurat() {
     const dispatch = useDispatch();
@@ -18,6 +20,10 @@ function TafsirSurat() {
     const tafsirAyat = tafsirSurat?.data?.tafsir?.filter(item => item.ayat === parseInt(nomorAyat));
 
     return (
+        <div>
+            <Header />
+        
+
         <div className="container mt-5 mx-auto max-w-3xl">
             {tafsirAyat && tafsirAyat.map((tafsirItem, index) => (
                 <div className="flex flex-col justify-center items-center mb-8 mt-10" key={index}>
@@ -32,6 +38,8 @@ function TafsirSurat() {
                     </div>
                 </div>
             ))}
+        </div>
+        <Footer />
         </div>
     );
 }

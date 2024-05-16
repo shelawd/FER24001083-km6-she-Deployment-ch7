@@ -3,6 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getDetailSurat } from "../redux/actions/suratActions";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faStop, faListUl } from '@fortawesome/free-solid-svg-icons';
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function DetailPage() {
   const navigate = useNavigate();
@@ -51,6 +56,9 @@ function DetailPage() {
   };
 
   return (
+    <div>
+      <Header />
+    
     <div className="container mt-5 mx-auto max-w-3xl">
       {suratDetail && suratDetail.data && (
         <div className="flex flex-col justify-center items-center mb-8">
@@ -108,6 +116,8 @@ function DetailPage() {
               </option>
             ))}
         </select>
+        
+
         {/* Render Teks Arab sesuai dengan ayat yang dipilih */}
         <div className="container mt-5 mx-auto max-w-3xl">
           {!selectedAyat && (
@@ -139,9 +149,9 @@ function DetailPage() {
                             `/tafsir-surat/${nomorSurat}/${ayat.nomorAyat}`
                           );
                         }}
-                        className="text-blue-500 hover:text-blue-700"
+                        className="text-purple-700 hover:text-purple-900"
                       >
-                        Tafsir Surat
+                        <FontAwesomeIcon icon={faListUl} />
                       </button>
                       <button
                         onClick={() =>
@@ -149,15 +159,17 @@ function DetailPage() {
                             ayat.audio[Object.keys(ayat.audio)[0]]
                           )
                         }
-                        className="text-blue-500 hover:text-blue-700"
+                        className="text-blue-500 hover:text-blue-700 ms-2"
                       >
-                        Play Audio
+                        <FontAwesomeIcon icon={faPlay} />
+                        
                       </button>
                       <button
                   onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 ms-2"
                 >
-                  Stop Audio
+                  <FontAwesomeIcon icon={faStop} />
+                 
                 </button>
                     </div>
                   </div>
@@ -195,9 +207,9 @@ function DetailPage() {
                   onClick={() => {
                     navigate(`/tafsir-surat/${nomorSurat}/${selectedAyat}`);
                   }}
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-purple-700 hover:text-purple-900"
                 >
-                  Tafsir Surat
+                  <FontAwesomeIcon icon={faListUl} />
                 </button>
                 <button
                   onClick={() =>
@@ -209,21 +221,23 @@ function DetailPage() {
                       ]
                     )
                   }
-                  className="text-blue-500 hover:text-blue-700"
+                  className="text-blue-500 hover:text-blue-700 ms-2"
                 >
-                  Play Audio
+                  <FontAwesomeIcon icon={faPlay} />
                 </button>
                 <button
                   onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 ms-2"
                 >
-                  Stop Audio
+                  <FontAwesomeIcon icon={faStop} />
                 </button>
               </div>
             </div>
           )}
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }
