@@ -107,7 +107,6 @@ function Header() {
         <div className={`md:hidden absolute top-16 right-0 ${showNavMenu ? 'block' : 'hidden'}`}>
           <div className="bg-gray-800 p-4">
             <Link to="/home" className="text-white block p-2 hover:bg-gray-700">Home</Link>
-            <Link to="/about" className="text-white block p-2 hover:bg-gray-700">About</Link>
             {isLoggedIn && (
               <button onClick={handleLogout} className="text-white block p-2 hover:bg-gray-700">
                 Logout
@@ -125,7 +124,6 @@ function Header() {
         {/* Menu on Desktop */}
         <div className="hidden md:flex">
           <Link to="/home" className="text-blue-200 p-2 hover:text-blue-100 mr-2 ms-4">Home</Link>
-          <Link to="/about" className="text-blue-200 p-2 hover:text-blue-100 mr-2">About</Link>
           {isLoggedIn ? (
             <button onClick={handleLogout} className="inline-block p-2 text-blue-200 hover:text-blue-100 mr-2">
               Logout
