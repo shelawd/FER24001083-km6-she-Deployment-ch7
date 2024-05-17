@@ -16,6 +16,7 @@ function Home() {
 
   const surat = useSelector((state) => state.surat.surat.data);
   const searchResults = useSelector((state) => state.surat.searchResults);
+  const { isdarkMode } = useSelector((state) => state.darkMode);
 
   useEffect(() => {
     dispatch(getAllSurat());
@@ -30,20 +31,19 @@ function Home() {
   }, []);
 
   const handleSearch = (event) => {
-    const query = event.target.value; 
-    setSearchQuery(query); // menyimpan nilai pencarian di state
-    dispatch(searchSurat(query)); 
+    const query = event.target.value;
+    setSearchQuery(query);
+    dispatch(searchSurat(query));
   };
 
-  // Menentukan data yang akan ditampilkan berdasarkan hasil pencarian atau semua surat
   const dataToDisplay = searchQuery.trim() !== "" ? searchResults : surat;
 
   return (
-    <div>
+    <div className={isdarkMode ? "dark-mode" : "light-mode"}>
       <Header />
       <div className="text-center mt-9">
         <div
-          className="bg-[#912BBC] p-2 rounded-md text-white inline-block bg-cover"
+          className="bg-primary p-2 rounded-md text-white inline-block bg-cover"
           style={{
             width: "fit-content",
             backgroundImage: `url(${aurora})`,
@@ -57,10 +57,10 @@ function Home() {
         <input
           type="text"
           placeholder="Cari surat..."
-          value={searchQuery} 
+          value={searchQuery}
           onChange={handleSearch}
-          className="bg-white rounded-md p-2 text-black mt-6 ms-11 outline-none focus:ring-2 focus:ring-[#7360DF] focus:border-transparent"
-        /> 
+          className="input rounded-md p-2 mt-6 ms-11 outline-none focus:ring-2 focus:ring-[#7360DF] focus:border-transparent"
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-10">
@@ -68,36 +68,35 @@ function Home() {
           dataToDisplay.map((data) => (
             <div
               key={data.nomor}
-              className="bg-[#E4A5FF] rounded p-4 flex justify-start items-center  "
+              className="card rounded p-4 flex justify-start items-center"
               onClick={() => {
                 navigate(`/detail-surat/${data.nomor}`);
               }}
             >
               <div className="w-1/6">
-                <p className="text-[#912BBC] font-bold">{data.nomor}</p>
+                <p className="text-primary font-bold">{data.nomor}</p>
               </div>
               <div className="w-1/3 ml-4 cursor-pointer">
-                <p className="text-sm text-[#912BBC] font-bold">
+                <p className="text-sm text-primary font-bold">
                   {data.namaLatin}
                 </p>
-                <p className="text-[#F0F3FF]">Ayat: {data.jumlahAyat}</p>
+                <p className="text-secondary">Ayat: {data.jumlahAyat}</p>
               </div>
               <div className="w-1/2 flex justify-end">
-                <h4 className="text-xl font-bold text-[#912BBC]">
+                <h4 className="text-xl font-bold text-primary">
                   {data.nama}
                 </h4>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-center text-[#912BBC] font-bold mt-4">
+          <p className="text-center text-primary font-bold mt-4">
             {searchQuery.trim() !== "" ? "Surat tidak ditemukan!" : "Memuat..."}
           </p>
         )}
       </div>
       <Footer />
     </div>
-    
   );
 }
 

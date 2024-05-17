@@ -1,16 +1,3 @@
-// import { DARK_MODE } from "../type.js";
-
-// export const handledarkMode = (isdarkMode) => async (dispatch) => {
-//   // Menyimpan nilai isdarkMode ke dalam local storage
-//   localStorage.setItem("darkmode", isdarkMode);
-
-//   // Mengirimkan nilai isdarkMode sebagai payload ke reducer
-//   dispatch({
-//     type: DARK_MODE,
-//     payload: isdarkMode,
-//   });
-// };
-
 import { DARK_MODE } from "../type.js";
 
 export const handledarkMode = (e) => async (dispatch) => {

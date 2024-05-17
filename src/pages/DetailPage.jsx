@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getDetailSurat } from "../redux/actions/suratActions";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faStop, faListUl } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faStop, faListUl } from "@fortawesome/free-solid-svg-icons";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -14,13 +14,14 @@ function DetailPage() {
   const dispatch = useDispatch();
   const { nomorSurat } = useParams();
   const [selectedAyat, setSelectedAyat] = useState("");
-  const [audio, setAudio] = useState(null); 
+  const [audio, setAudio] = useState(null);
 
   const suratDetail = useSelector((state) => state.surat.suratDetail);
+  const { isdarkMode } = useSelector((state) => state.darkMode);
 
   useEffect(() => {
     dispatch(getDetailSurat(nomorSurat));
-    
+
     return () => {
       if (audio) {
         audio.pause();
@@ -56,188 +57,162 @@ function DetailPage() {
   };
 
   return (
-    <div>
+    <div className={isdarkMode ? "dark-mode" : "light-mode"}>
       <Header />
-    
-    <div className="container mt-5 mx-auto max-w-3xl">
-      {suratDetail && suratDetail.data && (
-        <div className="flex flex-col justify-center items-center mb-8">
-          <h2 className="text-3xl font-bold text-purple-700">
-            {suratDetail.data.nama}
+
+      <div className="container mt-5 mx-auto max-w-3xl">
+        {suratDetail && suratDetail.data && (
+          <div className="flex flex-col justify-center items-center mb-8">
+            <h2 className="detail-name text-3xl font-bold text-purple-700">
+              {suratDetail.data.nama}
+            </h2>
+            <h2 className="detail-teks text-xl text-[#912BBC]">
+              {suratDetail.data.namaLatin}
+            </h2>
+            <div className="detail-teks flex flex-row">
+              <p className="detail-teks mb-2 ">
+                {suratDetail.data.tempatTurun}-
+              </p>
+              <p className=" detail-teks mb-2">
+                {suratDetail.data.jumlahAyat}
+              </p>
+            </div>
+          </div>
+        )}
+        {suratDetail && suratDetail.data && (
+          <div className="card-detail mb-8 rounded-lg p-4">
+            <p
+              className="mb-2"
+              dangerouslySetInnerHTML={{
+                __html: suratDetail.data.deskripsi,
+              }}
+            />
+          </div>
+        )}
+
+        {/* Render Teks Arab */}
+        <div className="mb-8">
+          <h2 className="detail-name text-center text-2xl font-bold mb-6 text-purple-700">
+            بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
           </h2>
-          <h2 className="text-xl text-[#912BBC]">
-            {suratDetail.data.namaLatin}
-          </h2>
-          <div className="flex flex-row">
-            <p className="mb-2 text-[#912BBC]">
-              {suratDetail.data.tempatTurun}-
-            </p>
-            <p className="mb-2 text-[#912BBC]">{suratDetail.data.jumlahAyat}</p>
+          <select
+            value={selectedAyat}
+            onChange={handleAyatChange}
+            className="card-detail block appearance-none bg-white border  hover:border-gray-500 px-4 py-2 mb-3 pr-8 rounded shadow leading-tight outline-none focus:ring-2  focus:border-transparent"
+            style={{ maxWidth: "150px" }}
+          >
+            <option value="">Pilih Ayat</option>
+            {suratDetail &&
+              suratDetail.data &&
+              suratDetail.data.ayat.map((ayat) => (
+                <option key={ayat.nomorAyat} value={ayat.nomorAyat}>
+                  Ayat {ayat.nomorAyat}
+                </option>
+              ))}
+          </select>
+
+          {/* Render Teks Arab sesuai dengan ayat yang dipilih */}
+          <div className="container mt-5 mx-auto max-w-3xl">
+            {!selectedAyat && (
+              <div>
+                {suratDetail &&
+                  suratDetail.data &&
+                  suratDetail.data.ayat.map((ayat) => (
+                    <div key={ayat.nomorAyat} className="mb-4">
+                      <div className="card-detail p-4 rounded-lg ">
+                        <p className="mb-2">
+                          <strong>Ayat {ayat.nomorAyat}</strong>
+                        </p>
+                        <p className="text-right text-2xl mb-2">
+                          {ayat.teksArab}
+                        </p>
+                        <p className="mb-2 italic mt-8">{ayat.teksLatin}</p>
+                        <p className="mb-2">Artinya: {ayat.teksIndonesia}</p>
+                        <button
+                          onClick={() => {
+                            navigate(
+                              `/tafsir-surat/${nomorSurat}/${ayat.nomorAyat}`
+                            );
+                          }}
+                          className="icon-tafsir hover:text-yellow-500"
+                        >
+                          <FontAwesomeIcon icon={faListUl} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleAudioPlay(
+                              ayat.audio[Object.keys(ayat.audio)[0]]
+                            )
+                          }
+                          className="text-blue-500 hover:text-blue-700 ms-2"
+                        >
+                          <FontAwesomeIcon icon={faPlay} />
+                        </button>
+                        <button
+                          onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
+                          className="text-red-500 hover:text-red-700 ms-2"
+                        >
+                          <FontAwesomeIcon icon={faStop} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {selectedAyat && (
+              <div className="mb-4">
+                <div className="card-detail p-4 rounded-lg">
+                  <p className="mb-2">
+                    <strong>
+                      {suratDetail.data.ayat[selectedAyat - 1].nomorAyat}
+                    </strong>
+                  </p>
+                  <p className="text-right text-2xl mb-2">
+                    {suratDetail.data.ayat[selectedAyat - 1].teksArab}
+                  </p>
+                  <p className="mb-2 italic mt-8">
+                    {suratDetail.data.ayat[selectedAyat - 1].teksLatin}
+                  </p>
+                  <p className="mb-2">
+                    Artinya:{" "}
+                    {suratDetail.data.ayat[selectedAyat - 1].teksIndonesia}
+                  </p>
+                  <button
+                    onClick={() => {
+                      navigate(`/tafsir-surat/${nomorSurat}/${selectedAyat}`);
+                    }}
+                    className="icon-tafsir hover:text-yellow-500"
+                  >
+                    <FontAwesomeIcon icon={faListUl} />
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleAudioPlay(
+                        suratDetail.data.ayat[selectedAyat - 1].audio[
+                          Object.keys(
+                            suratDetail.data.ayat[selectedAyat - 1].audio
+                          )[0]
+                        ]
+                      )
+                    }
+                    className="text-blue-500 hover:text-blue-700 ms-2"
+                  >
+                    <FontAwesomeIcon icon={faPlay} />
+                  </button>
+                  <button
+                    onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
+                    className="text-red-500 hover:text-red-700 ms-2"
+                  >
+                    <FontAwesomeIcon icon={faStop} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      )}
-      {suratDetail && suratDetail.data && (
-        <div
-          className="mb-8"
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            padding: "20px",
-            borderRadius: "10px",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <p
-            className="mb-2"
-            style={{ color: "#333", textAlign: "justify" }}
-            dangerouslySetInnerHTML={{
-              __html: suratDetail.data.deskripsi,
-            }}
-          />
-        </div>
-      )}
-
-      {/* Render Teks Arab */}
-      <div className="mb-8">
-        <h2 className="text-center text-2xl font-bold mb-6 text-purple-700">
-          بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
-        </h2>
-        <select
-          value={selectedAyat}
-          onChange={handleAyatChange}
-          className="block appearance-none bg-white border  hover:border-gray-500 px-4 py-2 mb-3 pr-8 rounded shadow leading-tight outline-none focus:ring-2  focus:border-transparent"
-          style={{ maxWidth: "150px" }}
-        >
-          <option value="">Pilih Ayat</option>
-          {suratDetail &&
-            suratDetail.data &&
-            suratDetail.data.ayat.map((ayat) => (
-              <option key={ayat.nomorAyat} value={ayat.nomorAyat}>
-                Ayat {ayat.nomorAyat}
-              </option>
-            ))}
-        </select>
-        
-
-        {/* Render Teks Arab sesuai dengan ayat yang dipilih */}
-        <div className="container mt-5 mx-auto max-w-3xl">
-          {!selectedAyat && (
-            <div>
-              {suratDetail &&
-                suratDetail.data &&
-                suratDetail.data.ayat.map((ayat) => (
-                  <div key={ayat.nomorAyat} className="mb-4">
-                    <div
-                      className="p-4 rounded-lg"
-                      style={{
-                        backgroundColor: "rgba(255, 255, 255, 0.9)",
-                        padding: "20px",
-                        borderRadius: "10px",
-                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                      }}
-                    >
-                      <p className="mb-2">
-                        <strong>Ayat {ayat.nomorAyat}</strong>
-                      </p>
-                      <p className="text-right text-2xl mb-2">
-                        {ayat.teksArab}
-                      </p>
-                      <p className="mb-2 italic mt-8">{ayat.teksLatin}</p>
-                      <p className="mb-2">Artinya: {ayat.teksIndonesia}</p>
-                      <button
-                        onClick={() => {
-                          navigate(
-                            `/tafsir-surat/${nomorSurat}/${ayat.nomorAyat}`
-                          );
-                        }}
-                        className="text-purple-700 hover:text-purple-900"
-                      >
-                        <FontAwesomeIcon icon={faListUl} />
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleAudioPlay(
-                            ayat.audio[Object.keys(ayat.audio)[0]]
-                          )
-                        }
-                        className="text-blue-500 hover:text-blue-700 ms-2"
-                      >
-                        <FontAwesomeIcon icon={faPlay} />
-                        
-                      </button>
-                      <button
-                  onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
-                  className="text-red-500 hover:text-red-700 ms-2"
-                >
-                  <FontAwesomeIcon icon={faStop} />
-                 
-                </button>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          )}
-
-          {selectedAyat && (
-            <div className="mb-4">
-              <div
-                className="p-4 rounded-lg"
-                style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.9)",
-                  padding: "20px",
-                  borderRadius: "10px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <p className="mb-2">
-                  <strong>
-                    {suratDetail.data.ayat[selectedAyat - 1].nomorAyat}
-                  </strong>
-                </p>
-                <p className="text-right text-2xl mb-2">
-                  {suratDetail.data.ayat[selectedAyat - 1].teksArab}
-                </p>
-                <p className="mb-2 italic mt-8">
-                  {suratDetail.data.ayat[selectedAyat - 1].teksLatin}
-                </p>
-                <p className="mb-2">
-                  Artinya:{" "}
-                  {suratDetail.data.ayat[selectedAyat - 1].teksIndonesia}
-                </p>
-                <button
-                  onClick={() => {
-                    navigate(`/tafsir-surat/${nomorSurat}/${selectedAyat}`);
-                  }}
-                  className="text-purple-700 hover:text-purple-900"
-                >
-                  <FontAwesomeIcon icon={faListUl} />
-                </button>
-                <button
-                  onClick={() =>
-                    handleAudioPlay(
-                      suratDetail.data.ayat[selectedAyat - 1].audio[
-                        Object.keys(
-                          suratDetail.data.ayat[selectedAyat - 1].audio
-                        )[0]
-                      ]
-                    )
-                  }
-                  className="text-blue-500 hover:text-blue-700 ms-2"
-                >
-                  <FontAwesomeIcon icon={faPlay} />
-                </button>
-                <button
-                  onClick={handleStopAudio} // Menambahkan fungsi untuk menghentikan audio
-                  className="text-red-500 hover:text-red-700 ms-2"
-                >
-                  <FontAwesomeIcon icon={faStop} />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
-    </div>
-    <Footer />
+      <Footer />
     </div>
   );
 }

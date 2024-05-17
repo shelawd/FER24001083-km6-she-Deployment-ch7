@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getMe, logout } from "../redux/actions/authActions";
-import { confirmAlert } from 'react-confirm-alert'; 
-import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { BsMoonStarsFill, BsFillSunFill } from "react-icons/bs";
 import { handledarkMode } from "../redux/actions/darkModeActions";
-import  "../app.css";
+import "../app.css"; 
 
 function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { isLoggedIn, user } = useSelector((state) => state.auth);
-  const mode = useSelector((state) => state.darkMode);
+  const { isdarkMode } = useSelector((state) => state.darkMode);
 
   const [showNavMenu, setShowNavMenu] = useState(false);
 
@@ -40,14 +40,12 @@ function Header() {
     });
   };
 
-  const { isdarkMode } = mode;
-
   const switchDarkMode = () => {
     dispatch(handledarkMode(!isdarkMode));
   };
 
   useEffect(() => {
-    document.body.style.backgroundColor = isdarkMode ? "#292c35" : "#e5d4ff";
+    document.body.className = isdarkMode ? "dark-mode" : "light-mode";
   }, [isdarkMode]);
 
   const toggleNavMenu = () => {
@@ -65,7 +63,9 @@ function Header() {
             className="ms-3"
           />
         </Link>
-        <p className={`inline-block p-2 md:text-xl font-semibold text-blue-200 ms-3 ${isLoggedIn ? '' : 'hidden'}`}>Welcome, {user?.name}👋 </p>
+        <p className={`inline-block p-2 md:text-xl font-semibold text-blue-200 ms-3 ${isLoggedIn ? '' : 'hidden'}`}>
+          Welcome, {user?.name}👋
+        </p>
       </div>
 
       <div className="flex items-center">

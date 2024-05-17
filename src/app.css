@@ -39,3 +39,91 @@
     transform: translateX(24px);
   }
   
+
+ /* styles.css */
+body.light-mode {
+  background-color: #e5d4ff;
+  color: #000000;
+}
+
+body.dark-mode {
+  background-color: #00215E;
+  color: #F0F3FF;
+}
+
+.light-mode .bg-primary {
+  background-color: #912BBC;
+}
+
+.dark-mode .bg-primary {
+  background-color: #345A8A;
+}
+
+.light-mode .text-primary {
+  color: #912BBC;
+}
+
+.dark-mode .text-primary {
+  color: #E4A5FF;
+}
+
+.light-mode .card {
+  background-color: #E4A5FF;
+}
+
+.dark-mode .card {
+  background-color: #345A8A;
+}
+
+.light-mode .input {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 1px solid #7360DF;
+}
+
+.dark-mode .input {
+  background-color: #1E3A5F;
+  color: #F0F3FF;
+  border: 1px solid #F0F3FF;
+}
+
+.light-mode .text-secondary {
+  color: #000000;
+}
+
+.dark-mode .text-secondary {
+  color: #A0C4FF;
+}
+
+/* detail page */
+
+.dark-mode .detail-name {
+  color: #cab6f3;
+}
+.light-mode .detail-name {
+  color: #1C1678;
+}
+
+.dark-mode .card-detail {
+  background-color: #345A8A;
+}
+
+.light-mode .card-detail {
+  background-color: #F5F7F8;
+}
+
+.dark-mode .detail-teks {
+  color: #f5f1fd;
+}
+
+.light-mode .detail-teks {
+  color: #912BBC;
+}
+
+.dark-mode .icon-tafsir {
+  color: #EBE76C;
+}
+
+.light-mode .icon-tafsir {
+  color: #8474dd;
+}
