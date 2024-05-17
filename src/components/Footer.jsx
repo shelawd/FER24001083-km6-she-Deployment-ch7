@@ -2,13 +2,15 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="bg-gray-800 text-white p-4 mt-8">
-      <div className="container mx-auto">
-        <div className="flex justify-center items-center">
-          <p className="text-sm">&copy; 2024 QuranApp. All rights reserved.</p>
+    <div className="px-14 pt-12 pb-5 bg-main text-center relative">
+      <hr className="pb-6 border-black" />
+      <div className="flex justify-center items-center text-sm">
+        <div className="font-bold">
+          Copyright &copy; 2024 |{" "}
+          <span className="text-secondary">Quran</span> App
         </div>
       </div>
-    </footer>
+    </div>
   );
 }
 
