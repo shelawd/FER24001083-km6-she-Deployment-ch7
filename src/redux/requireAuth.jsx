@@ -1,19 +1,23 @@
 // requireAuth.js
 import React from "react";
 import { useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Navigate } from "react-router-dom";
 
-const RequireAuth = ({ children }) => {
+const RequireAuth = ({ children, redirectTo = "/", inverse = false }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const navigate = useNavigate(); // Gunakan useNavigate
 
-  // Jika pengguna belum login, arahkan ke halaman login
-  if (!isLoggedIn) {
-    navigate("/login"); // Gunakan navigate untuk navigasi
-    return null; // Kembalikan null agar komponen tidak dirender
+  if (inverse) {
+    // Pengguna sudah login dan mencoba mengakses halaman login/register
+    if (isLoggedIn) {
+      return <Navigate to={redirectTo} />; // Arahkan ke halaman utama atau halaman lain
+    }
+  } else {
+    // Pengguna belum login dan mencoba mengakses halaman 
+    if (!isLoggedIn) {
+      return <Navigate to="/login" />; // Arahkan ke halaman login
+    }
   }
 
-  // Jika pengguna sudah login, tampilkan halaman yang diminta
   return children;
 };
 

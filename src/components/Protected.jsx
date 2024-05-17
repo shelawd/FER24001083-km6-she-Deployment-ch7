@@ -14,11 +14,15 @@ function Protected({ children }) {
     if (!token) {
         toast.error("Silakan login terlebih dahulu!");
       return navigate("/");
+    } else {
+      dispatch(getMe(navigate, null, "/"))
     }
 
-    // get user information
-    dispatch(getMe(navigate, null, "/"));
   }, [navigate, dispatch, token]);
+
+  if(!token) {
+  return children;
+  }
 
   return children;
 }

@@ -12,6 +12,7 @@ import TafsirSurat from "./pages/TafsirSurat";
 import Register from "./pages/Register";
 import LandingPage from "./components/LandingPage";
 import Protected from "./components/Protected";
+import RequireAuth from "./redux/requireAuth";
 
 function App() {
   return (
@@ -23,8 +24,8 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<RequireAuth inverse={true} redirectTo="/home"><Login /></RequireAuth>} />
+              <Route path="/register" element={<RequireAuth inverse={true} redirectTo="/home"><Register /></RequireAuth>} />
               <Route path="/home" element={ <Protected><Home /></Protected>} />
               <Route path="/detail-surat/:nomorSurat" element={<Protected><DetailPage /></Protected>} />
               <Route path="/tafsir-surat/:nomorSurat/:nomorAyat" element={<Protected><TafsirSurat /></Protected>} />
